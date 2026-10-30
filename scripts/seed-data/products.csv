@@ -1,0 +1,6 @@
+id,name,descriptionEn,descriptionMs,price,bg,gridClass,aspectClass,imageUrl
+p1,Senja Tote,Indigo & rust wax-dye,Celupan lilin indigo & karat,RM 480,#8B3A3A,col-span-1 lg:col-span-3,aspect-[4/5],https://res.cloudinary.com/mvnsfvvi/image/upload/v1793350613/cld-sample-4.jpg
+p2,Warisan Sling,Gold-leaf motif,Motif daun emas,RM 350,#4a2632,col-span-1 lg:col-span-3,aspect-[4/5],https://res.cloudinary.com/mvnsfvvi/image/upload/v1793350613/cld-sample-4.jpg
+p3,Pesisir Clutch,Coastal wave print,Cetakan ombak pantai,RM 220,#B8863E,col-span-1 lg:col-span-2,aspect-[3/4],https://res.cloudinary.com/mvnsfvvi/image/upload/v1793350613/cld-sample-4.jpg
+p4,Kembara Weekender,Deep maroon dye,Celupan merah marun pekat,RM 620,#6f2c2c,col-span-1 lg:col-span-2,aspect-[3/4],https://res.cloudinary.com/mvnsfvvi/image/upload/v1793350613/cld-sample-4.jpg
+p5,Malam Pouch,Midnight indigo,Indigo tengah malam,RM 150,#33465C,col-span-1 lg:col-span-2,aspect-[3/4],https://res.cloudinary.com/mvnsfvvi/image/upload/v1793350613/cld-sample-4.jpg

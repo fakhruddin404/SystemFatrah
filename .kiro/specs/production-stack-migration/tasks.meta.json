@@ -1,0 +1,539 @@
+{
+  "pbtResults": {
+    "4.4 Write property-based test for mapRowToProduct (optional, fast-check)": {
+      "status": "passed",
+      "lastRunTimestamp": 1793352570968
+    }
+  },
+  "executionHistory": {
+    "1.1 Install and configure runtime and dev dependencies": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097140
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193109778
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193545487
+      }
+    ],
+    "1.2 Configure Vitest and Playwright harnesses": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097237
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193110707
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193546408
+      }
+    ],
+    "1.3 Create environment scaffolding and secret hygiene": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097328
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193111852
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193547300
+      }
+    ],
+    "1.4 Checkpoint - Ensure harness and typecheck pass": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097407
+      }
+    ],
+    "2.1 Author the products table migration": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097549
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193557095
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193712058
+      }
+    ],
+    "2.2 Author RLS policies in the migration": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097665
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193557999
+      },
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193755953
+      }
+    ],
+    "2.3 **[USER ACTION REQUIRED]** Create Supabase project and apply the migration": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097806
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348474239
+      }
+    ],
+    "2.4 Generate the Database/ProductRow types": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193097923
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348478645
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348617556
+      }
+    ],
+    "2.5 Checkpoint - Verify schema and types compile": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098040
+      }
+    ],
+    "3.1 Implement the service-role client and SeedRowInput validator (seed-only)": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098175
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348623094
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348901074
+      }
+    ],
+    "3.2 Implement scripts/seed-products.ts parse-validate-upsert flow": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098308
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348905250
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349032170
+      }
+    ],
+    "3.3 Write unit tests for SeedRowInput": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098471
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349038405
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349278213
+      }
+    ],
+    "3.4 Write unit tests for seed validation/abort behavior": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098585
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349039222
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349279153
+      }
+    ],
+    "3.5 **[USER ACTION REQUIRED]** Upload images to Cloudinary and run the seed": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098702
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352128426
+      }
+    ],
+    "3.6 Checkpoint - Ensure seed tests pass": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098798
+      }
+    ],
+    "4.1 Implement the Supabase anon client factory": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098897
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348906310
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349033367
+      }
+    ],
+    "4.2 Implement mapRowToProduct pure mapping and re-export the Product type": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193098985
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793348906928
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349033944
+      }
+    ],
+    "4.5 Implement fetchProducts and fetchProductById with caching and fail-soft": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099074
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349040288
+      },
+      {
+        "executionId": "941ba609-2df0-4ccc-871c-89c2040f2701",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793349280218
+      }
+    ],
+    "4.9 Checkpoint - Ensure data-layer tests pass": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099161
+      }
+    ],
+    "5.1 Repoint page imports to lib/products and remove csv-parser fallback": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099248
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352879794
+      },
+      {
+        "executionId": "3af8cd67-74fd-478c-b731-0aaafaebd67e",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793353247266
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793353493527
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793353585302
+      }
+    ],
+    "5.2 Whitelist res.cloudinary.com in next.config.mjs": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099337
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352880579
+      },
+      {
+        "executionId": "3af8cd67-74fd-478c-b731-0aaafaebd67e",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793353223968
+      }
+    ],
+    "5.3 Checkpoint - Verify build and typecheck after wiring": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099426
+      }
+    ],
+    "6.1 Write unit tests for WhatsApp message formatting (EN and MS)": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099580
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793353591081
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354163861
+      }
+    ],
+    "6.6 Checkpoint - Ensure regression and e2e tests pass": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099704
+      }
+    ],
+    "7.1 Author the GitHub Actions workflow": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193099902
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355209995
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355798877
+      }
+    ],
+    "7.2 Add CI/CD configuration and contributor documentation notes": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193100028
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355211039
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355799827
+      }
+    ],
+    "7.3 **[USER ACTION REQUIRED]** Connect Vercel/GitHub, set env vars, enable branch protection": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193100136
+      }
+    ],
+    "7.4 Final checkpoint - Ensure all tests pass": [
+      {
+        "executionId": "969c8e49-68c0-4c47-ae7e-2322b3855b9a",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793193100237
+      }
+    ],
+    "4.3 Write unit tests for mapRowToProduct": [
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352441696
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352461692
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352645161
+      }
+    ],
+    "4.4 Write property-based test for mapRowToProduct (optional, fast-check)": [
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352442498
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352462669
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352646122
+      }
+    ],
+    "4.6 Write integration tests for fetchProducts / fetchProductById ordering and hit/miss": [
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352443691
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352463903
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352646923
+      }
+    ],
+    "4.7 Write integration test for fail-soft reads": [
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352444892
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352464898
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352648123
+      }
+    ],
+    "4.8 Write integration test for RLS anon read/write boundary": [
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352445594
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352465702
+      },
+      {
+        "executionId": "a02c859f-68ac-4f10-8947-145b96ff52de",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793352648782
+      }
+    ],
+    "6.2 Write Playwright e2e: homepage grid and composition": [
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354189046
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354599685
+      }
+    ],
+    "6.3 Write Playwright e2e: product detail bilingual + made-to-order note": [
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354190256
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355207022
+      }
+    ],
+    "6.4 Write Playwright e2e: language toggle": [
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354191301
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355208012
+      }
+    ],
+    "6.5 Write Playwright e2e: add-to-cart and WhatsApp URL contents": [
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793354192787
+      },
+      {
+        "executionId": "f7739a7d-7987-45c4-a31e-87f69eb7d746",
+        "chatSessionId": "sess_290012ad-bfce-41de-8ca5-d70f18b6c3e7",
+        "timestamp": 1793355209189
+      }
+    ]
+  }
+}
