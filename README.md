@@ -4,7 +4,7 @@ Bilingual (EN / BM) catalog for handcrafted Terengganu batik bags, built with Ne
 
 ## Local setup
 
-1. `npm install`
+1. Use Node 22+ (required by supabase-js; set by `.nvmrc` / `engines`), then `npm install`
 2. Copy `.env.example` to `.env.local` and fill in:
    - `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
    - `SUPABASE_SERVICE_ROLE_KEY` (local only, for seeding; never deploy it)
@@ -28,7 +28,10 @@ Bilingual (EN / BM) catalog for handcrafted Terengganu batik bags, built with Ne
 
 GitHub Actions runs `lint`, `typecheck`, `unit` and `integration` as required checks on `main`; Vercel deploys previews per PR and production on merge to `main`. Branch protection, secrets, Vercel env wiring, the anon-only credentials rule and troubleshooting are documented in [docs/deployment.md](docs/deployment.md).
 
-Quick troubleshooting for seeding:
+In Vercel, confirm Project Settings → Build and Deployment → Node.js Version is 22.x.
 
+Quick troubleshooting:
+
+- `Node.js detected but native WebSocket not found`: you are running on Node < 22.
 - `new row violates row-level security policy`: you used the anon key instead of the `service_role` key.
 - `Could not find the table 'public.products' in the schema cache`: apply the migration, then run `notify pgrst, 'reload schema';`.
