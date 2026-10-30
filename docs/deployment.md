@@ -45,7 +45,13 @@ Every deployment environment (Vercel Production/Preview/Development and GitHub A
 
 Merging to `main` (after the required checks pass) triggers the Vercel Production deployment automatically. Pull requests get Preview deployments, which then trigger `E2E Preview`.
 
+## Node version
+
+Node 22+ is required (`@supabase/*` packages declare `engines: node >=22`). The version is set by `.nvmrc` (used by GitHub Actions via `node-version-file`) and `engines` in `package.json` (read by Vercel). In Vercel, confirm Project Settings → Build and Deployment → Node.js Version is 22.x.
+
 ## Troubleshooting
+
+- `Node.js detected but native WebSocket not found`: the code is running on Node < 22. Check `.nvmrc`, the workflow `setup-node` step, and the Vercel Node.js Version setting.
 
 - `new row violates row-level security policy` during `npm run seed`: the wrong key is in use. `.env.local` has the anon key where the `service_role` key is needed for `SUPABASE_SERVICE_ROLE_KEY`.
 - `Could not find the table 'public.products' in the schema cache`: the migration has not been applied, or PostgREST has not reloaded. Apply `supabase/migrations/20250101000000_create_products.sql`, then run `notify pgrst, 'reload schema';` in the SQL editor.
