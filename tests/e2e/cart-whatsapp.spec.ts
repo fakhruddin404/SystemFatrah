@@ -35,6 +35,10 @@ async function openFirstProduct(page: Page): Promise<string> {
   await page.goto(href!);
   const name = (await page.getByRole('heading', { level: 1 }).first().innerText()).trim();
   expect(name.length).toBeGreaterThan(0);
+
+  // Products with sizes need one chosen before they can be ordered.
+  const sizes = page.getByRole('radio');
+  if ((await sizes.count()) > 0) await sizes.first().click();
   return name;
 }
 
@@ -80,7 +84,9 @@ test.describe('cart and WhatsApp ordering', () => {
     expect(text).toContain(name);
     expect(text).toContain(`x${qty}`);
     expect(text).toContain(priceText);
-    expect(text).toContain(`Total: ${expectedTotal}`);
+    expect(text).toContain(`Subtotal: ${expectedTotal}`);
+    expect(text).toContain('Delivery fee will be confirmed on WhatsApp.');
+    expect(text).toContain('Hello Fat_Rahz Batik!');
     // We stayed on the site.
     expect(new URL(page.url()).hostname).not.toContain('wa.me');
   });

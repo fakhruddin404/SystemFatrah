@@ -3,6 +3,7 @@ import { Fraunces, Work_Sans } from 'next/font/google';
 import { LanguageProvider } from '@/context/LanguageContext';
 import { CartProvider } from '@/context/CartContext';
 import CartDrawer from '@/components/CartDrawer';
+import { SITE_NAME } from '@/lib/site';
 import './globals.css';
 
 const fraunces = Fraunces({
@@ -20,8 +21,16 @@ const workSans = Work_Sans({
 });
 
 export const metadata: Metadata = {
-  title: 'FATRAH — Terengganu Batik Bags',
-  description: 'Handcrafted Terengganu batik bags, made slowly by artisans who carry the tradition forward.',
+  title: {
+    default: `${SITE_NAME} — Terengganu Batik Bags`,
+    template: `%s — ${SITE_NAME}`,
+  },
+  description:
+    'Modern, elegant bags sewn from authentic Terengganu batik. 100% handmade in Terengganu since 2014.',
+  openGraph: {
+    siteName: SITE_NAME,
+    type: 'website',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function Hero() {
@@ -17,12 +18,20 @@ export default function Hero() {
         <p className="text-[17px] text-ink-soft max-w-full lg:max-w-[380px] mb-[36px]">
           {t('heroSubhead')}
         </p>
-        <a 
-          href="#collection" 
-          className="inline-flex items-center gap-2.5 bg-maroon text-warm-white py-[15px] px-[30px] text-sm font-medium border border-maroon w-fit transition-colors duration-300 hover:bg-maroon-deep"
-        >
-          {t('heroCta')}
-        </a>
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Link
+            href="/pre-order"
+            className="inline-flex items-center justify-center gap-2.5 bg-maroon text-warm-white py-[15px] px-[30px] text-sm font-medium border border-maroon w-fit transition-colors duration-300 hover:bg-maroon-deep"
+          >
+            {t('heroCta')}
+          </Link>
+          <Link
+            href="/ready-stock"
+            className="inline-flex items-center justify-center gap-2.5 bg-transparent text-ink py-[15px] px-[30px] text-sm font-medium border border-ink w-fit transition-colors duration-300 hover:bg-ink hover:text-warm-white"
+          >
+            {t('heroCtaSecondary')}
+          </Link>
+        </div>
       </div>
 
       <div className="flex-none lg:flex-[0_0_58%] relative overflow-hidden bg-gradient-to-br from-[#cf8a52] via-[#8B3A3A] to-[#4a2632] h-[60vw] min-h-[340px] lg:h-auto order-1 lg:order-2">

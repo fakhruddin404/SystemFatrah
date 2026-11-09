@@ -1,76 +1,102 @@
 'use client';
 
-import { createContext, useContext, useState, ReactNode, useCallback } from 'react';
-import type { Product } from '@/lib/products';
+import { createContext, useContext, useState, ReactNode, useCallback, useMemo } from 'react';
+import type { Product, ProductSize } from '@/lib/products';
+import type { ReadyStockItem } from '@/lib/ready-stock';
+import {
+  type CartLine,
+  addLine,
+  buildPreorderLine,
+  buildReadyStockLine,
+  removeLine,
+  setLineQuantity,
+  subtotalMyr,
+  totalQuantity,
+} from '@/lib/cart-lines';
+import { formatMyr } from '@/lib/money';
 
-interface CartItem {
-  product: Product;
-  quantity: number;
+interface AddPreorderOptions {
+  size?: ProductSize | null;
+  quantity?: number;
 }
 
 interface CartContextValue {
-  items: CartItem[];
+  items: CartLine[];
   isOpen: boolean;
   openCart: () => void;
   closeCart: () => void;
-  addItem: (product: Product) => void;
-  removeItem: (id: string) => void;
-  updateQty: (id: string, qty: number) => void;
+  addPreorder: (product: Product, options?: AddPreorderOptions) => void;
+  addReadyStock: (item: ReadyStockItem) => void;
+  removeItem: (key: string) => void;
+  /** Removes several lines at once (e.g. bags that sold while in the cart). */
+  removeKeys: (keys: string[]) => void;
+  updateQty: (key: string, qty: number) => void;
+  hasItem: (key: string) => boolean;
   totalCount: number;
+  subtotal: number;
+  /** Subtotal formatted with two decimals, e.g. "RM 960.00". Excludes delivery. */
   totalPrice: string;
 }
 
 const CartContext = createContext<CartContextValue | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const addItem = useCallback((product: Product) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.product.id === product.id);
-      if (existing) {
-        return prev.map((i) =>
-          i.product.id === product.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prev, { product, quantity: 1 }];
-    });
+  const addPreorder = useCallback((product: Product, options: AddPreorderOptions = {}) => {
+    const line = buildPreorderLine(product, options.size ?? null, options.quantity ?? 1);
+    setItems((prev) => addLine(prev, line));
     setIsOpen(true);
   }, []);
 
-  const removeItem = useCallback((id: string) => {
-    setItems((prev) => prev.filter((i) => i.product.id !== id));
+  const addReadyStock = useCallback((item: ReadyStockItem) => {
+    const line = buildReadyStockLine(item);
+    setItems((prev) => addLine(prev, line));
+    setIsOpen(true);
   }, []);
 
-  const updateQty = useCallback((id: string, qty: number) => {
-    if (qty <= 0) {
-      setItems((prev) => prev.filter((i) => i.product.id !== id));
-    } else {
-      setItems((prev) =>
-        prev.map((i) => (i.product.id === id ? { ...i, quantity: qty } : i))
-      );
-    }
+  const removeItem = useCallback((key: string) => {
+    setItems((prev) => removeLine(prev, key));
   }, []);
 
-  const totalCount = items.reduce((sum, i) => sum + i.quantity, 0);
+  const removeKeys = useCallback((keys: string[]) => {
+    setItems((prev) => prev.filter((l) => !keys.includes(l.key)));
+  }, []);
 
-  const totalPrice = (() => {
-    const total = items.reduce((sum, i) => {
-      const num = parseFloat(i.product.price.replace(/[^0-9.]/g, ''));
-      return sum + (isNaN(num) ? 0 : num * i.quantity);
-    }, 0);
-    return `RM ${total.toFixed(2)}`;
-  })();
+  const updateQty = useCallback((key: string, qty: number) => {
+    setItems((prev) => setLineQuantity(prev, key, qty));
+  }, []);
 
-  return (
-    <CartContext.Provider value={{ items, isOpen, openCart, closeCart, addItem, removeItem, updateQty, totalCount, totalPrice }}>
-      {children}
-    </CartContext.Provider>
+  const hasItem = useCallback((key: string) => items.some((l) => l.key === key), [items]);
+
+  const totalCount = totalQuantity(items);
+  const subtotal = subtotalMyr(items);
+  const totalPrice = formatMyr(subtotal, { fixed: true });
+
+  const value = useMemo(
+    () => ({
+      items,
+      isOpen,
+      openCart,
+      closeCart,
+      addPreorder,
+      addReadyStock,
+      removeItem,
+      removeKeys,
+      updateQty,
+      hasItem,
+      totalCount,
+      subtotal,
+      totalPrice,
+    }),
+    [items, isOpen, openCart, closeCart, addPreorder, addReadyStock, removeItem, removeKeys, updateQty, hasItem, totalCount, subtotal, totalPrice]
   );
+
+  return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 }
 
 export function useCart() {

@@ -11,6 +11,6 @@ import { test, expect } from '@playwright/test';
  * later tasks.
  */
 test('playwright e2e harness smoke test', async ({ page }) => {
-  await page.setContent('<h1 data-testid="smoke">FATRAH harness ok</h1>');
-  await expect(page.getByTestId('smoke')).toHaveText('FATRAH harness ok');
+  await page.setContent('<h1 data-testid="smoke">Fat_Rahz Batik harness ok</h1>');
+  await expect(page.getByTestId('smoke')).toHaveText('Fat_Rahz Batik harness ok');
 });

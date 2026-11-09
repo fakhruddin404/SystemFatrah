@@ -1,38 +1,48 @@
 # Project Structure
 
 ```
-app/                     # Next.js App Router routes
-├── layout.tsx           # root layout: loads fonts, wraps app in LanguageProvider + CartProvider, mounts CartDrawer
-├── page.tsx             # homepage; async Server Component that fetches products and composes sections
-├── globals.css          # global styles / design tokens
-├── craft/page.tsx       # "Our Craft" page
-└── products/[id]/page.tsx  # dynamic product detail page (uses generateStaticParams + generateMetadata)
-components/              # presentational + interactive UI components
-├── Header.tsx           # nav, language toggle, cart button ('use client')
-├── Hero.tsx
-├── Showcase.tsx         # auto-advancing product slider (receives slides as props)
-├── Collection.tsx       # product grid (receives products as props)
-├── Banner.tsx
-├── Footer.tsx
-├── ProductActions.tsx   # qty selector + add-to-cart + WhatsApp order ('use client')
-└── CartDrawer.tsx       # slide-out cart + WhatsApp checkout ('use client')
-context/                 # React Context providers for global state
-├── LanguageContext.tsx  # EN/BM state + translation dictionary + useLanguage hook
-└── CartContext.tsx      # cart state + useCart hook
-hooks/                   # reusable React hooks
-└── useScrollReveal.ts   # IntersectionObserver-based scroll reveal
-lib/                     # framework-agnostic utilities / data access
-└── csv-parser.ts        # Product type + fetchProducts/fetchProductById
+app/                         # Next.js App Router routes
+├── layout.tsx               # root layout: fonts, metadata template, LanguageProvider + CartProvider, CartDrawer
+├── page.tsx                 # homepage: hero, showcase, "Ready now" strip, pre-order preview, banner
+├── pre-order/page.tsx       # all pre-order designs
+├── products/[id]/page.tsx   # pre-order detail (sizes, quantity, lead-time note)
+├── ready-stock/page.tsx     # grid of available one-of-a-kind bags
+├── ready-stock/[code]/      # bag detail (page.tsx) + friendly not-found.tsx
+├── about/page.tsx           # Our Story (/craft redirects here via next.config.mjs)
+├── actions/                 # public Server Actions (verify-ready-stock.ts)
+└── admin/                   # protected admin (never indexed)
+    ├── login/               # sign-in page + actions
+    └── (protected)/         # layout calls requireAdmin(); dashboard, ready-stock/, products/, media/
+components/                  # UI components (default export, PascalCase file name)
+├── admin/                   # admin-only forms and lists (ReadyStockForm, ProductForm, MediaInput, ...)
+├── ProductCard / PreorderCard / ReadyStockCard / StatusBadge / MediaImage
+├── ProductPurchasePanel / ReadyStockActions / SizeSelector / QuantityStepper
+└── Header / Hero / Showcase / Collection / ReadyNow / Banner / Footer / CartDrawer / AboutContent
+content/about.ts             # typed EN/MS copy for the Our Story page
+context/                     # LanguageContext (EN/BM dictionary) and CartContext
+hooks/                       # useScrollReveal, useWhatsAppCheckout
+lib/                         # framework-agnostic code
+├── site.ts                  # brand name, WhatsApp number, social links, lead time
+├── products.ts / ready-stock.ts   # data access (anon client, cached, fail-soft) + row mappers
+├── cart-lines.ts / whatsapp.ts / money.ts / pricing.ts   # pure, unit-tested logic
+├── media.ts / cloudinary-signing.ts / cloudinary-server.ts
+├── admin/                   # auth.ts, schemas.ts (Zod), revalidate.ts, action-state.ts
+└── supabase/                # anon.ts, server.ts (user session), database.types.ts
+middleware.ts                # guards /admin/* and refreshes the session
+supabase/migrations/         # additive SQL migrations; supabase/deferred/ holds post-rollout ones
+scripts/                     # seed script, CSV seed data, target guard (local tooling only)
+tests/{unit,integration,e2e}/
+docs/deployment.md           # environments, secrets, rollout checklist
 ```
 
 ## Where things go
 
-- **Routes / pages** → `app/`. Keep pages as async Server Components that fetch data and pass it down as props.
-- **UI components** → `components/`. Default export, PascalCase filename matching the component name.
-- **Shared state** → `context/`, exposed through a typed hook.
-- **Reusable hooks** → `hooks/`.
-- **Data access & pure utilities** → `lib/`. The `Product` interface is the canonical data shape and lives in `lib/csv-parser.ts`.
+- **Routes / pages** → `app/`. Keep public pages as async Server Components that fetch data and pass it down as props.
+- **UI components** → `components/`; admin-only ones in `components/admin/`.
+- **Business logic** (pricing, cart, message building, validation) → pure functions in `lib/` with unit tests; keep components thin.
+- **Copy** → short UI strings in the `LanguageContext` dictionary; long-form pages in `content/`; product text in the database (`description_en` / `description_ms`).
+- **Admin writes** → Server Actions next to their pages (`actions.ts`): `getAdmin()` first, Zod validation, then the Supabase call, then `revalidateReadyStock()` / `revalidateProducts()`.
 
 ## Data flow
 
-Server Components in `app/` call `lib/csv-parser.ts` to load products, then pass data down to components as props. Client components read interactive state through `useCart` / `useLanguage` rather than prop drilling.
+Public pages call `lib/products.ts` / `lib/ready-stock.ts`, then pass data to components as props. Client components read interactive state via `useCart` / `useLanguage`. Checkout builds the message in `lib/whatsapp.ts`; before opening WhatsApp, `useWhatsAppCheckout` calls `verifyReadyStock` so a bag that just sold is dropped. Admin changes go through Server Actions under the user's session, are enforced by RLS, and invalidate the cache tags the public pages use.

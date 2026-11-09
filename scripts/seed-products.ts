@@ -1,29 +1,42 @@
 /**
- * SEED-ONLY. One-time, idempotent CSV -> Supabase `products` upsert.
+ * SEED-ONLY. Idempotent CSV -> Supabase upsert for products, sizes and sample ready stock.
  *
- * Runs locally via `npm run seed [path-to-csv]`. Must never be imported by
- * app/, components/, or lib/ runtime code (it uses the service-role key).
+ * Runs locally via `npm run seed [path-to-products-csv] [--confirm-production]`. Must never be
+ * imported by app/, components/, or lib/ runtime code (it uses the service-role key).
  *
- * CSV source precedence: CLI path argument > GOOGLE_SHEETS_CSV_URL > the
+ * Which project it touches is controlled by SUPABASE_TARGET in .env.local:
+ *   - staging:    seeds products, sizes and sample ready-stock bags
+ *   - production: seeds products only, and only with --confirm-production
+ *
+ * Products CSV source precedence: CLI path argument > GOOGLE_SHEETS_CSV_URL > the
  * bundled scripts/seed-data/products.csv.
  */
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
 import Papa from 'papaparse';
 import type { SupabaseClient } from '@supabase/supabase-js';
+import type { z } from 'zod';
 import type { Database, TablesInsert } from '../lib/supabase/database.types';
-import { SeedRowInput } from './seed-row-input';
+import { parseMyr } from '../lib/money';
+import {
+  SeedReadyStockInput,
+  SeedRowInput,
+  SeedSizeInput,
+} from './seed-row-input';
 import {
   createServiceRoleClient,
   exitOnStartupError,
   loadLocalEnv,
 } from './service-role-client';
+import { TargetError, describeProject, resolveSeedTarget } from './target-guard';
 
 export type ProductInsert = TablesInsert<'products'>;
+export type SizeInsert = TablesInsert<'product_sizes'>;
+export type ReadyStockInsert = TablesInsert<'ready_stock_items'>;
 export type RawRow = Record<string, string>;
 
 export interface SeedRowIssue {
-  /** `id` of the offending row (falls back to `row N` when the id is missing). */
+  /** Identifier of the offending row (falls back to `row N` when missing). */
   id: string;
   field: string;
   message: string;
@@ -60,29 +73,37 @@ export function parseCsv(csvText: string): RawRow[] {
   return result.data;
 }
 
+/** Pure: validates EVERY row against a schema; throws SeedValidationError on the first failure. */
+function validateAll<S extends z.ZodType>(
+  schema: S,
+  rawRows: RawRow[],
+  idField: string
+): z.infer<S>[] {
+  return rawRows.map((raw, i) => {
+    const parsed = schema.safeParse(raw);
+    if (!parsed.success) {
+      const first = parsed.error.issues[0];
+      throw new SeedValidationError({
+        id: raw?.[idField]?.trim() || `row ${i + 1}`,
+        field: first.path.length ? first.path.join('.') : '(row)',
+        message: first.message,
+      });
+    }
+    return parsed.data;
+  });
+}
+
 /**
  * Pure: validates EVERY row; returns the parsed (trimmed) output, or the first
  * failure with the offending row id and field.
  */
 export function validateRows(rawRows: RawRow[]): ValidationResult {
-  const rows: SeedRowInput[] = [];
-  for (let i = 0; i < rawRows.length; i++) {
-    const raw = rawRows[i];
-    const parsed = SeedRowInput.safeParse(raw);
-    if (!parsed.success) {
-      const first = parsed.error.issues[0];
-      return {
-        ok: false,
-        error: {
-          id: raw?.id?.trim() || `row ${i + 1}`,
-          field: first.path.length ? first.path.join('.') : '(row)',
-          message: first.message,
-        },
-      };
-    }
-    rows.push(parsed.data);
+  try {
+    return { ok: true, rows: validateAll(SeedRowInput, rawRows, 'id') };
+  } catch (err) {
+    if (err instanceof SeedValidationError) return { ok: false, error: err.issue };
+    throw err;
   }
-  return { ok: true, rows };
 }
 
 /** Pure: validated camelCase rows -> snake_case insert rows; sort_order = row position. */
@@ -92,7 +113,7 @@ export function toInsertRows(rows: SeedRowInput[]): ProductInsert[] {
     name: r.name,
     description_en: r.descriptionEn,
     description_ms: r.descriptionMs,
-    price: r.price,
+    price_myr: parseMyr(r.price),
     bg: r.bg,
     grid_class: r.gridClass,
     aspect_class: r.aspectClass,
@@ -113,6 +134,48 @@ export async function seedProducts(csvText: string, upsert: UpsertFn): Promise<n
   return upsert(toInsertRows(validation.rows));
 }
 
+/** Pure: product-sizes CSV rows -> insert rows. */
+export function toSizeRows(rows: SeedSizeInput[]): SizeInsert[] {
+  return rows.map((r) => ({
+    product_id: r.productId,
+    label: r.label,
+    sort_order: Number(r.sortOrder),
+    price_override_myr: r.priceOverrideMyr === '' ? null : Number(r.priceOverrideMyr),
+  }));
+}
+
+export async function seedSizes(
+  csvText: string,
+  upsert: (rows: SizeInsert[]) => Promise<number>
+): Promise<number> {
+  const rows = validateAll(SeedSizeInput, parseCsv(csvText), 'productId');
+  if (rows.length === 0) return 0;
+  return upsert(toSizeRows(rows));
+}
+
+/** Pure: sample ready-stock CSV rows -> insert rows. */
+export function toReadyStockRows(rows: SeedReadyStockInput[]): ReadyStockInsert[] {
+  return rows.map((r, index) => ({
+    code: r.code,
+    name: r.name,
+    description_en: r.descriptionEn || null,
+    description_ms: r.descriptionMs || null,
+    price_myr: Number(r.priceMyr),
+    size_label: r.sizeLabel || null,
+    image_url: r.imageUrl,
+    sort_order: index,
+  }));
+}
+
+export async function seedReadyStock(
+  csvText: string,
+  upsert: (rows: ReadyStockInsert[]) => Promise<number>
+): Promise<number> {
+  const rows = validateAll(SeedReadyStockInput, parseCsv(csvText), 'code');
+  if (rows.length === 0) return 0;
+  return upsert(toReadyStockRows(rows));
+}
+
 /** Adapts a service-role client to UpsertFn (idempotent on `id`). */
 export function createUpsert(client: SupabaseClient<Database>): UpsertFn {
   return async (rows) => {
@@ -121,6 +184,28 @@ export function createUpsert(client: SupabaseClient<Database>): UpsertFn {
       .upsert(rows, { onConflict: 'id' })
       .select('id');
     if (error) throw new Error(`Supabase upsert failed: ${error.message}`);
+    return data?.length ?? 0;
+  };
+}
+
+function createSizesUpsert(client: SupabaseClient<Database>) {
+  return async (rows: SizeInsert[]): Promise<number> => {
+    const { data, error } = await client
+      .from('product_sizes')
+      .upsert(rows, { onConflict: 'product_id,label' })
+      .select('id');
+    if (error) throw new Error(`Supabase sizes upsert failed: ${error.message}`);
+    return data?.length ?? 0;
+  };
+}
+
+function createReadyStockUpsert(client: SupabaseClient<Database>) {
+  return async (rows: ReadyStockInsert[]): Promise<number> => {
+    const { data, error } = await client
+      .from('ready_stock_items')
+      .upsert(rows, { onConflict: 'code' })
+      .select('id');
+    if (error) throw new Error(`Supabase ready-stock upsert failed: ${error.message}`);
     return data?.length ?? 0;
   };
 }
@@ -139,20 +224,40 @@ async function loadCsvText(argPath: string | undefined, env: NodeJS.ProcessEnv):
 async function main(): Promise<void> {
   loadLocalEnv();
 
+  const args = process.argv.slice(2);
+  const confirmProduction = args.includes('--confirm-production');
+  const argPath = args.find((a) => !a.startsWith('--'));
+
   let client: SupabaseClient<Database>;
+  let target: ReturnType<typeof resolveSeedTarget>;
   try {
+    target = resolveSeedTarget(process.env, confirmProduction);
     client = createServiceRoleClient();
   } catch (err) {
     exitOnStartupError(err);
   }
 
+  console.log(`[seed] Target: ${target} (${describeProject(process.env)})`);
+
   try {
-    const csvText = await loadCsvText(process.argv[2], process.env);
+    const csvText = await loadCsvText(argPath, process.env);
     const count = await seedProducts(csvText, createUpsert(client));
     console.log(`[seed] Upserted ${count} product(s).`);
+
+    if (target === 'staging') {
+      const sizesCsv = await readFile(path.join(__dirname, 'seed-data', 'product-sizes.csv'), 'utf8');
+      const sizes = await seedSizes(sizesCsv, createSizesUpsert(client));
+      console.log(`[seed] Upserted ${sizes} size(s).`);
+
+      const stockCsv = await readFile(path.join(__dirname, 'seed-data', 'ready-stock.csv'), 'utf8');
+      const stock = await seedReadyStock(stockCsv, createReadyStockUpsert(client));
+      console.log(`[seed] Upserted ${stock} sample ready-stock bag(s).`);
+    }
   } catch (err) {
     if (err instanceof SeedValidationError) {
-      console.error(`[seed] ${err.message} No rows were written.`);
+      console.error(`[seed] ${err.message} No rows were written for that file.`);
+    } else if (err instanceof TargetError) {
+      console.error(`[seed] ${err.message}`);
     } else {
       console.error(`[seed] ${err instanceof Error ? err.message : String(err)}`);
     }

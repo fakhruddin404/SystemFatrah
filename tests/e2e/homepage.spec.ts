@@ -40,7 +40,7 @@ test.describe('homepage', () => {
     const footer = page.getByRole('contentinfo');
 
     await expect(header).toBeVisible();
-    await expect(header.getByRole('link', { name: 'FATRAH' })).toBeVisible();
+    await expect(header.getByRole('link', { name: 'Fat_Rahz Batik' })).toBeVisible();
     await expect(hero).toBeVisible();
     await expect(showcaseNext).toBeAttached();
     await expect(collection).toBeAttached();

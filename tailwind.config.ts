@@ -15,6 +15,8 @@ const config: Config = {
         maroon: "#8B3A3A",
         'maroon-deep': "#6f2c2c",
         gold: "#B8863E",
+        ready: "#2F6B4F",
+        'ready-deep': "#245640",
         line: "rgba(42,36,32,0.12)",
       },
       fontFamily: {

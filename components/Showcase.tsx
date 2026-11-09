@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Image from 'next/image';
+import MediaImage from '@/components/MediaImage';
 import type { Product } from '@/lib/products';
 
 interface ShowcaseProps {
@@ -37,7 +37,7 @@ export default function Showcase({ slides }: ShowcaseProps) {
           className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${i === current ? 'opacity-100 z-0' : 'opacity-0 -z-10'}`}
         >
           <div className="absolute inset-0 bg-ink/30 z-10" /> {/* Dark overlay for text legibility */}
-          <Image
+          <MediaImage
             src={s.imageUrl}
             alt={s.name}
             fill

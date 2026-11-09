@@ -20,7 +20,8 @@ type Pair = { key: string; en: string; ms: string };
 
 // Dictionary keys that are not rendered anywhere on the homepage:
 // `cart` is unused, `productNDesc` were replaced by DB-driven descriptions.
-const UNRENDERED_KEYS = /^(cart|product\d+Desc)$/;
+// `readyNow*` only render when at least one ready-stock bag is available.
+const UNRENDERED_KEYS = /^(cart|readyNow\w*)$/;
 
 function loadDictionaryPairs(): Pair[] {
   const src = readFileSync(join(process.cwd(), 'context', 'LanguageContext.tsx'), 'utf8');
@@ -55,9 +56,14 @@ const CART_ITEM_PAIRS: Pair[] = [
   { key: 'drawer.remove', en: 'Remove', ms: 'Buang' },
   { key: 'drawer.subtotal', en: 'Subtotal', ms: 'Jumlah kecil' },
   {
+    key: 'drawer.delivery',
+    en: 'Delivery fee will be confirmed with you on WhatsApp.',
+    ms: 'Kos penghantaran akan disahkan dengan anda melalui WhatsApp.',
+  },
+  {
     key: 'drawer.leadTime',
-    en: 'Made to order — allow 2–4 weeks for delivery.',
-    ms: 'Dibuat mengikut tempahan — 2–4 minggu untuk penghantaran.',
+    en: 'Pre-order items are made to order — allow 2–4 weeks.',
+    ms: 'Item pra-tempah dibuat mengikut tempahan — tempoh 2–4 minggu.',
   },
   { key: 'drawer.whatsapp', en: 'Order via WhatsApp', ms: 'Pesan via WhatsApp' },
 ];
@@ -125,7 +131,7 @@ test.describe('language toggle', () => {
     const descLocator = page.locator('#collection h3 + div > span:first-child');
     const en = await descLocator.allInnerTexts();
     await toggle(page);
-    await expect(page.getByText('Lihat Semua')).toBeVisible();
+    await expect(page.getByText('Lihat Semua').first()).toBeVisible();
     const ms = await descLocator.allInnerTexts();
 
     expect(ms).toHaveLength(en.length);
@@ -134,7 +140,7 @@ test.describe('language toggle', () => {
     expect(ms.some((d, i) => d !== en[i])).toBe(true);
 
     await toggle(page);
-    await expect(page.getByText('View All')).toBeVisible();
+    await expect(page.getByText('View All').first()).toBeVisible();
     expect(await descLocator.allInnerTexts()).toEqual(en);
   });
 
@@ -148,8 +154,10 @@ test.describe('language toggle', () => {
     await page.getByRole('button', { name: 'Close cart' }).click();
     await expect(page.getByRole('complementary', { name: 'Shopping cart' })).toHaveClass(/translate-x-full/);
 
-    const addButtons = page.getByRole('button', { name: '+ Add to Cart' });
-    test.skip((await addButtons.count()) === 0, 'No products rendered; cannot populate cart');
+    // Pre-order cards only: the lead-time note is checked below and applies to pre-order items.
+    // (Cards for products with sizes have no quick add, so this needs a one-size product.)
+    const addButtons = page.locator('#collection').getByRole('button', { name: '+ Add to Cart' });
+    test.skip((await addButtons.count()) === 0, 'No one-size pre-order products rendered; cannot populate cart');
     // The button lives in a hover overlay; force the click.
     await addButtons.first().click({ force: true });
 

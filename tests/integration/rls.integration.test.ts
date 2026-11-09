@@ -72,7 +72,7 @@ describe.skipIf(!hasEnv)('RLS anon read/write boundary (Property 2: Read-only an
         name: SENTINEL,
         description_en: SENTINEL,
         description_ms: SENTINEL,
-        price: 'RM 0',
+        price_myr: 0,
         bg: '#000000',
         grid_class: SENTINEL,
         aspect_class: SENTINEL,

@@ -53,9 +53,11 @@ jobs:
     name: integration
     runs-on: ubuntu-latest
     env:
-      # Separate Supabase TEST project, anon key only (app reads are anon-only).
+      # fatrah-staging, anon key only. The TEST_* secrets must point at the STAGING project.
       NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.TEST_SUPABASE_URL }}
       NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.TEST_SUPABASE_ANON_KEY }}
+      # Integration tests refuse to run unless the target is explicitly staging.
+      SUPABASE_TARGET: staging
     steps:
       - uses: actions/checkout@v4
       - name: Check Supabase test secrets

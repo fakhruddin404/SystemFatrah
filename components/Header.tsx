@@ -1,8 +1,10 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { useLanguage } from '@/context/LanguageContext';
 import { useCart } from '@/context/CartContext';
+import { SITE_NAME, whatsappUrl } from '@/lib/site';
 
 export default function Header() {
   const { toggle, t } = useLanguage();
@@ -10,23 +12,39 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
-    { href: '#collection', key: 'navCollection' as const },
-    { href: '/craft', key: 'navCraft' as const },
-    { href: '#', key: 'navContact' as const },
+    { href: '/pre-order', key: 'navPreorder' as const, external: false },
+    { href: '/ready-stock', key: 'navReadyStock' as const, external: false },
+    { href: '/about', key: 'navStory' as const, external: false },
+    { href: whatsappUrl(), key: 'navContact' as const, external: true },
   ];
 
+  const renderLink = (l: (typeof links)[number], className?: string, children?: React.ReactNode) =>
+    l.external ? (
+      <a href={l.href} target="_blank" rel="noopener noreferrer" className={className}>
+        {children ?? t(l.key)}
+      </a>
+    ) : (
+      <Link href={l.href} className={className} onClick={() => setMenuOpen(false)}>
+        {children ?? t(l.key)}
+      </Link>
+    );
+
   return (
-    <header className="sticky top-0 z-50 bg-[#F3EDE1]/90 backdrop-blur-md border-b border-line">
+    <header className="sticky top-0 z-50 bg-[#F3EDE1]/90 backdrop-blur-md border-b border-ink/80">
       <nav className="max-w-[1280px] mx-auto px-6 lg:px-10 h-[84px] flex items-center justify-between">
-        <a href="/" className="font-serif text-[26px] font-medium tracking-[0.5px]">FATRAH</a>
+        <Link href="/" className="font-serif text-[22px] sm:text-[26px] font-medium tracking-[0.5px]">{SITE_NAME}</Link>
 
         <ul className="hidden lg:flex gap-10 text-sm font-medium">
           {links.map((l) => (
             <li key={l.key}>
-              <a href={l.href} className="relative py-1 group">
-                {t(l.key)}
-                <span className="absolute left-0 bottom-[-2px] w-0 h-[1px] bg-maroon transition-all duration-300 group-hover:w-full" />
-              </a>
+              {renderLink(
+                l,
+                'relative py-1 group',
+                <>
+                  {t(l.key)}
+                  <span className="absolute left-0 bottom-[-2px] w-0 h-[1px] bg-maroon transition-all duration-300 group-hover:w-full" />
+                </>
+              )}
             </li>
           ))}
         </ul>
@@ -51,7 +69,7 @@ export default function Header() {
             )}
           </button>
 
-          <button className="border border-line px-3 py-1.5 text-xs font-semibold tracking-wide text-ink hover:border-maroon hover:text-maroon transition-colors" onClick={toggle}>EN / BM</button>
+          <button className="border border-ink/40 px-3 py-1.5 text-xs font-semibold tracking-wide text-ink hover:border-maroon hover:text-maroon transition-colors" onClick={toggle}>EN / BM</button>
 
           <button
             className="lg:hidden"
@@ -66,12 +84,12 @@ export default function Header() {
       </nav>
 
       <div
-        className={`lg:hidden absolute top-[84px] left-0 right-0 bg-warm-white border-line overflow-hidden transition-all duration-300 ease-in-out ${menuOpen ? 'max-h-[400px] border-b opacity-100' : 'max-h-0 border-b-0 opacity-0'}`}
+        className={`lg:hidden absolute top-[84px] left-0 right-0 bg-warm-white border-ink/80 overflow-hidden transition-all duration-300 ease-in-out ${menuOpen ? 'max-h-[400px] border-b opacity-100' : 'max-h-0 border-b-0 opacity-0'}`}
       >
         <div className="px-6 py-6 pb-8">
           <ul className="flex flex-col gap-[18px] text-[15px] font-medium">
             {links.map((l) => (
-              <li key={l.key}><a href={l.href}>{t(l.key)}</a></li>
+              <li key={l.key}>{renderLink(l)}</li>
             ))}
           </ul>
         </div>

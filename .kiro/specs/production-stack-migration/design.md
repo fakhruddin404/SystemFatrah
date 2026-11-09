@@ -1,5 +1,15 @@
 # Design Document: Production Stack Migration
 
+> **Status: partly superseded.** This document describes the first migration (Supabase read path, Cloudinary by URL, seed script). The "Fat_Rahz Batik" work that followed changes several of its statements:
+>
+> - **There is now an admin area with auth.** Admins sign in with Supabase Auth; writes run on the signed-in user's JWT and are enforced by RLS (`admin_users` allowlist, `is_admin()`). The "no admin, no auth, no API/server actions" statements below no longer hold.
+> - **Cloudinary now has a server-side secret.** `CLOUDINARY_URL` is a server-only variable used to sign uploads and delete assets (`lib/cloudinary-server.ts`, `server-only`). The "no Cloudinary secret in the runtime" statements no longer hold.
+> - **Prices are numeric.** `products.price_myr numeric(10,2)` replaces the display string; the legacy `price` column is dropped by a deferred migration after rollout.
+> - **Two Supabase projects** (`fatrah-prod`, `fatrah-staging`) with explicit `SUPABASE_TARGET` guards on the seed script and integration tests.
+> - **Still true:** the Supabase **service-role key is never present in the deployed runtime**; it is used only by local tooling. The `Product` UI contract keeps its shape and gains `priceMyr`, `details` and `sizes`.
+>
+> See `docs/deployment.md` and `README.md` for the current architecture, environment variables and rollout checklist.
+
 ## Overview
 
 This migration moves the FATRAH batik-bag catalog off its current static architecture (Google Sheets CSV with a hardcoded fallback in `lib/csv-parser.ts`, no database, no media pipeline) onto a production-grade stack: **Supabase (PostgreSQL)** for data, **Cloudinary** for media delivery, and **Vercel + GitHub** for CI/CD with preview deployments. The goal is to showcase modern DevOps, full-stack, and automated-testing skills while keeping the visible product behavior identical.
